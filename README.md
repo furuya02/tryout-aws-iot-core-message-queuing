@@ -1,11 +1,13 @@
 
-# AWS IoT Core Message Queuing Test Suite
+# Tryout AWS IoT Core Message Queuin
 
 AWS IoT Core の新機能「Message Queuing for MQTT Shared Subscriptions」を検証・テストするための包括的なプログラム群です。
 
 ## 🎯 プロジェクト概要
 
-このテストスイートは、2024年7月31日にリリースされたAWS IoT Core Message Queuing機能の動作を実証・検証します：
+このテストスイートは、2025年7月31日にリリースされたAWS IoT Core Message Queuing機能の動作を実証・検証します：
+
+https://aws.amazon.com/jp/about-aws/whats-new/2025/07/aws-iot-core-message-queuing/
 
 - **シェアサブスクリプション**: 複数のサブスクライバー間でのメッセージ配信負荷分散
 - **メッセージキューイング**: サブスクライバー切断時のメッセージ保持機能
@@ -232,17 +234,7 @@ python -m src.publisher
 
 #### ステップ3: Message Queuing 確認
 
-1. **サブスクライバーを意図的に停止**（Ctrl+C）
-2. **パブリッシャーで再度メッセージ送信**
-   ```bash
-   python -m src.publisher
-   ```
-3. **サブスクライバーを再起動**
-   ```bash
-   python -m src.subscriber
-   ```
-4. **キューイングされたメッセージが配信されることを確認**
-
+サブスクライバーは、断続的に5〜15秒間、切断・再接続されますが、最終的に、パブリッシャーで送信した20件がすべて受信できることを確認できます。
 
 ### 🔍 確認ポイント
 
@@ -260,7 +252,7 @@ Publisher が20件送信した場合の正常な動作：
   01: 接続中, メッセージ数: 7
   02: 切断中, メッセージ数: 4    ← 切断中（Message Queuing中）
   03: 接続中, メッセージ数: 9
-📊 合計受信メッセージ数: 20（または18-20件）
+📊 合計受信メッセージ数: 20
 ⏳ 1個のサブスクライバーが切断中
 💡 切断中のサブスクライバー再接続時にキューイングメッセージが配信されます
 🔄 Message Queuing機能 動作中！
@@ -293,14 +285,6 @@ Publisher が20件送信した場合の正常な動作：
 | `SHARED_GROUP` | シェアサブスクリプショングループ名 | `message-queuing-group` |
 | `NUM_SUBSCRIBERS` | サブスクライバー数 | `3` |
 
-### 重要な技術仕様
-
-- **SDK**: AWS IoT Device SDK v2（paho-mqttから移行済み）
-- **Clean Session**: `false`（永続セッション必須）
-- **QoS**: `1`（メッセージキューイング要件）
-- **TLS**: 必須（AWS IoT証明書認証）
-- **シェアサブスクリプション形式**: `$share/{group}/{topic}`
-- **非同期処理**: Future-based操作によるパフォーマンス向上
 
 ## 📁 ディレクトリ構造
 
@@ -328,18 +312,3 @@ Publisher が20件送信した場合の正常な動作：
 3. **永続セッション**: 再接続時のキューメッセージ配信
 4. **QoS1保証**: メッセージ配信確実性
 
-## 🐛 トラブルシューティング
-
-### よくある問題
-
-- **接続エラー**: AWS IoTエンドポイントと証明書ファイルの確認
-- **メッセージ未受信**: Clean Session設定とQoS設定の確認
-- **キューイング未動作**: 永続セッション（Clean Session=false）の確認
-
-### デバッグ方法
-
-各コンポーネントは詳細なログを出力します。問題発生時はログを確認してください。
-
-## 📄 ライセンス
-
-このプロジェクトはMITライセンスの下で公開されています。
