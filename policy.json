@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:Connect"
+      ],
+      "Resource": "arn:aws:iot:*:*:client/message-queuing-test-*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:Publish"
+      ],
+      "Resource": [
+        "arn:aws:iot:*:*:topic/test/shared/messages"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:Subscribe"
+      ],
+      "Resource": [
+        "arn:aws:iot:*:*:topicfilter/$share/message-queuing-group/test/shared/messages",
+        "arn:aws:iot:*:*:topicfilter/test/shared/messages"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iot:Receive"
+      ],
+      "Resource": [
+        "arn:aws:iot:*:*:topic/$share/message-queuing-group/test/shared/messages",
+        "arn:aws:iot:*:*:topic/test/shared/messages"
+      ]
+    }
+  ]
+}
